@@ -11,21 +11,24 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { commonStyles, colors } from '../styles/common';
 import '../styles/Learnings.css';
 
+// Get the base URL from the homepage in package.json or default to empty string
+const BASE_URL = process.env.PUBLIC_URL || '';
+
 // Certificate data
 const certificates = [
   {
     title: 'Clean Architecture in .NET Core MVC|.NET 8| - Complete Guide',
-    image: '/images/certificates/clean-architecture.jpg',
+    image: `${BASE_URL}/images/certificates/clean-architecture.jpg`,
     platform: 'Udemy'
   },
   {
     title: 'Selenium WebDriver with C# from Scratch - Nunit Framework',
-    image: '/images/certificates/selenium.jpg',
+    image: `${BASE_URL}/images/certificates/selenium.jpg`,
     platform: 'Udemy'
   },
   {
     title: 'Complete C# Masterclass',
-    image: '/images/certificates/csharp.jpg',
+    image: `${BASE_URL}/images/certificates/csharp.jpg`,
     platform: 'Udemy'
   }
 ];
