@@ -1,0 +1,141 @@
+/**
+ * About Page Styles
+ * 
+ * Contains styles specific to the About page components including:
+ * - Animation keyframes for visual effects
+ * - Swiper carousel customizations
+ * - Transition effects for interactive elements
+ */
+
+/* Shimmer animation for cards and sections */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Experience card hover effect */
+.experience-card {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
+  transform: translateZ(0) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  will-change: transform, box-shadow !important;
+}
+
+.experience-card:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.25) !important;
+}
+
+/* Skill card animation class */
+.skill-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Fade-in animation for elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 
+ * Swiper Carousel Customizations
+ * These styles optimize the carousel transitions and animations
+ */
+
+/* Slide transition improvements */
+.swiper-slide {
+  transition: all 0.5s ease;
+  will-change: opacity, transform; /* Performance optimization */
+  transform: translateZ(0);        /* Hardware acceleration */
+  backface-visibility: hidden;     /* Prevent flickering */
+  perspective: 1000px;             /* 3D effect for smoother transitions */
+}
+
+/* Container styling for better positioning */
+.swiper-container {
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Navigation buttons styling and animations */
+.swiper-button-prev,
+.swiper-button-next {
+  transition: all 0.3s ease;
+  will-change: transform; /* Optimize button animations */
+}
+
+/* Hover effect for navigation buttons */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  transform: scale(1.1) translateY(-50%) !important; /* Slightly enlarge on hover */
+}
+
+/* Fix for fade effect border glitches */
+.swiper-wrapper {
+  transform-style: preserve-3d; /* Maintains 3D space for child elements */
+}
+
+/* Skills category card hover effect */
+.skills-category-card {
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out !important;
+  transform: translateZ(0) !important;
+  will-change: transform, box-shadow, border-color !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
+}
+
+.skills-category-card:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.2) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+/* Improved skills carousel */
+.skills-swiper {
+  padding: 10px 5px 30px !important;
+  margin: 0 auto !important;
+  max-width: 90% !important;
+  overflow: visible !important; /* Important for navigation buttons outside container */
+}
+
+/* Custom navigation button styles */
+.swiper-custom-prev,
+.swiper-custom-next {
+  width: 40px !important;
+  height: 40px !important;
+  opacity: 0.9 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-custom-prev:hover,
+.swiper-custom-next:hover {
+  transform: scale(1.1) translateY(-50%) !important;
+}
+
+/* Ensure navigation buttons remain visible on mobile */
+@media (max-width: 768px) {
+  .swiper-custom-prev,
+  .swiper-custom-next {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  .swiper-custom-prev {
+    left: 0 !important;
+  }
+  
+  .swiper-custom-next {
+    right: 0 !important;
+  }
+}

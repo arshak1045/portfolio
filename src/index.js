@@ -1,17 +1,24 @@
+/**
+ * Application Entry Point
+ * 
+ * This is the main entry file for the React application that:
+ * - Renders the root React component to the DOM
+ * - Applies global CSS styles
+ * 
+ * The file follows the standard React application structure with
+ * the App component rendered into a root DOM element.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
+// Create a root for React to render into
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render the App component
+// StrictMode is enabled for better development experience and to catch potential issues
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
