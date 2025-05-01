@@ -11,24 +11,21 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { commonStyles, colors } from '../styles/common';
 import '../styles/Learnings.css';
 
-// Get the base URL from the homepage in package.json or default to empty string
-const BASE_URL = process.env.PUBLIC_URL || '';
-
-// Certificate data
+// Certificate data with fully qualified URLs
 const certificates = [
   {
     title: 'Clean Architecture in .NET Core MVC|.NET 8| - Complete Guide',
-    image: `${BASE_URL}/images/certificates/clean-architecture.jpg`,
+    image: process.env.PUBLIC_URL + '/images/certificates/clean-architecture.jpg',
     platform: 'Udemy'
   },
   {
     title: 'Selenium WebDriver with C# from Scratch - Nunit Framework',
-    image: `${BASE_URL}/images/certificates/selenium.jpg`,
+    image: process.env.PUBLIC_URL + '/images/certificates/selenium.jpg',
     platform: 'Udemy'
   },
   {
     title: 'Complete C# Masterclass',
-    image: `${BASE_URL}/images/certificates/csharp.jpg`,
+    image: process.env.PUBLIC_URL + '/images/certificates/csharp.jpg',
     platform: 'Udemy'
   }
 ];
@@ -39,7 +36,7 @@ const projects = [
     title: 'Portfolio Website',
     description: 'Personal portfolio built with React and TailwindCSS',
     technologies: ['React', 'TypeScript'],
-    githubUrl: 'https://github.com/yourusername/portfolio'
+    githubUrl: 'https://github.com/arshak1045/portfolio'
   },
   {
     title: 'Selenium Test Framework',
