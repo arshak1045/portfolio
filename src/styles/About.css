@@ -93,12 +93,20 @@
   will-change: transform, box-shadow, border-color !important;
   backface-visibility: hidden !important;
   perspective: 1000px !important;
+  pointer-events: auto !important;
 }
 
 .skills-category-card:hover {
   transform: scale(1.02) !important;
   box-shadow: 0 6px 20px rgba(168, 85, 247, 0.2) !important;
   border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+/* Ensure hover effects also work for individual skill items */
+.skills-category-card .MuiPaper-root:hover {
+  background: rgba(168, 85, 247, 0.2) !important;
+  transform: translateY(-2px) translateZ(0) !important;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15) !important;
 }
 
 /* Improved skills carousel */
@@ -112,30 +120,47 @@
 /* Custom navigation button styles */
 .swiper-custom-prev,
 .swiper-custom-next {
-  width: 40px !important;
-  height: 40px !important;
+  width: 36px !important;
+  height: 36px !important;
   opacity: 0.9 !important;
   transition: all 0.3s ease !important;
 }
 
 .swiper-custom-prev:hover,
 .swiper-custom-next:hover {
-  transform: scale(1.1) translateY(-50%) !important;
+  transform: scale(1.1) !important;
 }
 
 /* Ensure navigation buttons remain visible on mobile */
 @media (max-width: 768px) {
   .swiper-custom-prev,
   .swiper-custom-next {
-    width: 36px !important;
-    height: 36px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
   
-  .swiper-custom-prev {
-    left: 0 !important;
+  .skills-swiper {
+    overflow: hidden !important;
+    position: relative !important;
   }
   
-  .swiper-custom-next {
-    right: 0 !important;
+  /* Prevent page scroll when touching carousel */
+  .swiper-slide {
+    touch-action: none !important;
   }
+}
+
+/* Fix carousel container to prevent scroll issues */
+.skills-swiper .swiper-wrapper {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Prevent scrolling to top when changing slides */
+.swiper-slide-active {
+  pointer-events: auto !important;
+}
+
+.swiper-slide {
+  pointer-events: auto !important; /* Changed from none to auto to allow hover effects */
 }

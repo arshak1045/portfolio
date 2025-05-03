@@ -91,9 +91,9 @@ const About = () => {
       'PsExec'
     ],
     'Project Management': [
-      'Jira ',
+      'Jira',
       'Confluence',
-      'TestRail ',
+      'TestRail',
       'Agile',
       'Scrum',
       'Kanban'
@@ -198,6 +198,56 @@ const About = () => {
           Skills
         </Typography>
 
+        {/* Navigation Buttons Container - Moved here to be under Skills title */}
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 6,
+          mb: 1,
+          gap: 2
+        }}>
+          <IconButton
+            className="swiper-custom-prev"
+            sx={{
+              color: '#fff',
+              background: 'rgba(30, 41, 59, 0.6)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(168, 85, 247, 0.15)',
+              p: 1,
+              '&:hover': {
+                color: '#a855f7',
+                background: 'rgba(30, 41, 59, 0.8)'
+              }
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+          <IconButton
+            className="swiper-custom-next"
+            sx={{
+              color: '#fff',
+              background: 'rgba(30, 41, 59, 0.6)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(168, 85, 247, 0.15)',
+              p: 1,
+              '&:hover': {
+                color: '#a855f7',
+                background: 'rgba(30, 41, 59, 0.8)'
+              }
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        </Box>
+
         {/* Skills Carousel with Swiper */}
         <Box sx={{ position: 'relative', my: 4 }}>
           <Swiper
@@ -232,6 +282,7 @@ const About = () => {
               }
             }}
             onSwiper={() => setLoading(false)}
+            preventScrollReset={true}
           >
             {/* Map over skills categories to create slides */}
             {Object.entries(skillsData).map(([category, skillList]) => (
@@ -299,51 +350,6 @@ const About = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-          
-          {/* Custom Navigation Buttons */}
-          <IconButton 
-            className="swiper-custom-prev" 
-            sx={{ 
-              position: 'absolute',
-              left: { xs: '5px', sm: '-5px', md: '-20px' },
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#fff',
-              zIndex: 20,
-              background: 'rgba(30, 41, 59, 0.6)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(168, 85, 247, 0.15)',
-              p: 1,
-              '&:hover': { 
-                color: '#a855f7',
-                background: 'rgba(30, 41, 59, 0.8)'
-              }
-            }}
-          >
-            <ChevronLeftIcon />
-          </IconButton>
-          
-          <IconButton 
-            className="swiper-custom-next"
-            sx={{ 
-              position: 'absolute',
-              right: { xs: '5px', sm: '-5px', md: '-20px' },
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#fff',
-              zIndex: 20,
-              background: 'rgba(30, 41, 59, 0.6)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(168, 85, 247, 0.15)',
-              p: 1,
-              '&:hover': { 
-                color: '#a855f7',
-                background: 'rgba(30, 41, 59, 0.8)'
-              }
-            }}
-          >
-            <ChevronRightIcon />
-          </IconButton>
         </Box>
       </Box>
     </Container>
