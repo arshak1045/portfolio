@@ -1,103 +1,36 @@
 import React from 'react';
-import { Container, Typography, Box, IconButton, Paper, Tooltip, useMediaQuery, useTheme } from '@mui/material';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import TelegramIcon from '@mui/icons-material/Telegram';
+import { Container, Typography, Box, IconButton, Paper, Tooltip, useMediaQuery, useTheme, Button } from '@mui/material';
 import '../styles/Home.css';
+import { usePortfolioData } from '../context/DataContext';
+import { LocationOnIcon } from '../data/contactInfo';
+import { commonStyles } from '../styles/common';
+import { SectionTitle, ContentCard } from './shared';
+import { generateResume } from '../utils/resumeGenerator';
+import DownloadIcon from '@mui/icons-material/Download';
 
 /**
  * Home Component
  * 
  * Main landing page of the portfolio website that displays:
  * - Personal introduction and headline
- * - Professional title and brief summary
- * - Profile image
+ * - Professional title
  * - Contact information sidebar with tooltip details
+ * - About Me section with bio
  * 
  * @returns {JSX.Element} The Home page content
  */
 const Home = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
-
-  // Common styles for reuse
-  const tooltipStyles = {
-    '& .MuiTooltip-tooltip': {
-      backgroundColor: 'rgba(30, 41, 59, 0.9)',
-      border: '1px solid rgba(168, 85, 247, 0.3)',
-      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
-      fontSize: '0.9rem',
-      padding: '8px 12px',
-      borderRadius: '6px'
-    },
-    '& .MuiTooltip-arrow': {
-      color: 'rgba(30, 41, 59, 0.9)'
-    }
-  };
-
-  const contactCardStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    p: 1.5,
-    gap: 1.5,
-    width: { xs: '160px', sm: '200px' },
-    background: 'rgba(30, 41, 59, 0.4)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(168, 85, 247, 0.15)',
-    borderRadius: '8px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.3s ease',
-    '&:hover': {
-      transform: 'translateY(-3px) scale(1.02)',
-      boxShadow: '0 6px 20px rgba(168, 85, 247, 0.2)',
-      borderColor: 'rgba(168, 85, 247, 0.4)'
-    }
-  };
-
-  const iconButtonStyles = {
-    color: '#a855f7',
-    p: 1,
-    backgroundColor: 'rgba(168, 85, 247, 0.1)',
-    '&:hover': { 
-      backgroundColor: 'rgba(168, 85, 247, 0.2)' 
-    }
-  };
-
-  // Contact information array for rendering
-  const contactInfo = [
-    {
-      id: 'email',
-      icon: <EmailIcon />,
-      label: 'Email',
-      value: 'hayryan1045@gmail.com',
-      href: 'mailto:hayryan1045@gmail.com'
-    },
-    {
-      id: 'phone',
-      icon: <PhoneIcon />,
-      label: 'Phone',
-      value: '+37433150750',
-      href: 'tel:+37433150750'
-    },
-    {
-      id: 'telegram',
-      icon: <TelegramIcon />,
-      label: 'Telegram',
-      value: '@arsh_hayr',
-      href: 'https://t.me/arsh_hayr',
-      target: '_blank'
-    },
-    {
-      id: 'linkedin',
-      icon: <LinkedInIcon />,
-      label: 'LinkedIn',
-      value: 'arshak-hayriyan-8a00a2229',
-      href: 'https://linkedin.com/in/arshak-hayriyan-8a00a2229',
-      target: '_blank'
-    }
-  ];
+  
+  // Use the portfolio data from context
+  const { 
+    personalInfo, 
+    contactInfoArray,
+    skills,
+    experience,
+    education
+  } = usePortfolioData();
 
   // Render the contacts section in different layouts based on screen size
   const renderContacts = () => {
@@ -112,44 +45,47 @@ const Home = () => {
           gap: 2,
           justifyContent: isDesktop ? 'flex-start' : 'center'
         }}>
-          {/* Render contact cards using the contactInfo array */}
-          {contactInfo.map((contact) => (
-            <Tooltip 
-              key={contact.id}
-              title={contact.value} 
-              placement={isDesktop ? "left" : "top"}
-              arrow
-              sx={tooltipStyles}
-            >
-              <Paper 
-                className="contact-item"
-                sx={contactCardStyles}
+          {/* Render contact cards using the contactInfoArray from context */}
+          {contactInfoArray.filter(contact => contact.id !== 'location').map((contact) => {
+            const Icon = contact.icon;
+            return (
+              <Tooltip 
+                key={contact.id}
+                title={contact.value} 
+                placement={isDesktop ? "left" : "top"}
+                arrow
+                sx={commonStyles.tooltip}
               >
-                <IconButton 
-                  sx={iconButtonStyles}
-                  href={contact.href}
-                  target={contact.target}
+                <Paper 
+                  className="contact-item"
+                  sx={commonStyles.contactCard}
                 >
-                  {contact.icon}
-                </IconButton>
-                <Typography sx={{ color: '#fff', fontSize: '0.9rem' }}>
-                  {contact.label}
-                </Typography>
-              </Paper>
-            </Tooltip>
-          ))}
+                  <IconButton 
+                    sx={commonStyles.contactIconButton}
+                    href={contact.href}
+                    target={contact.target}
+                  >
+                    <Icon />
+                  </IconButton>
+                  <Typography sx={{ color: '#fff', fontSize: '0.9rem' }}>
+                    {contact.label}
+                  </Typography>
+                </Paper>
+              </Tooltip>
+            );
+          })}
         </Box>
         
         {/* Location information */}
         <Tooltip 
-          title="Armenia, Yerevan" 
+          title={personalInfo.location.full} 
           placement={isDesktop ? "left" : "top"}
           arrow
-          sx={tooltipStyles}
+          sx={commonStyles.tooltip}
         >
           <Box 
             sx={{
-              ...contactCardStyles,
+              ...commonStyles.contactCard,
               mt: isDesktop ? 3 : 2,
               mx: isDesktop ? 0 : 'auto'
             }}
@@ -198,63 +134,31 @@ const Home = () => {
                 position: 'absolute',
                 bottom: '-6px',
                 left: 0,
-                width: '30px',
+                width: '50%',
                 height: '2px',
-                background: '#a855f7',
-                borderRadius: '2px'
+                background: 'linear-gradient(90deg, #a855f7 0%, rgba(168, 85, 247, 0) 100%)'
               }
             }}
           >
-            Contacts
+            Contact Me
           </Typography>
-          
           {renderContactCards()}
         </Box>
       );
     } else {
-      // Mobile/Tablet: Bottom of the page
+      // Mobile: Horizontal contact bar at the bottom of the hero section
       return (
         <Box
           className="contacts-mobile"
           sx={{ 
             width: '100%',
-            my: 6,
-            py: 4,
-            px: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            borderRadius: '16px',
-            background: 'rgba(15, 23, 42, 0.3)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(168, 85, 247, 0.1)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
+            mt: 6,
+            mb: 4
           }}
         >
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              color: '#a855f7', 
-              mb: 3,
-              fontWeight: 600,
-              position: 'relative',
-              textAlign: 'center',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                bottom: '-6px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '30px',
-                height: '2px',
-                background: '#a855f7',
-                borderRadius: '2px'
-              }
-            }}
-          >
-            Contacts
-          </Typography>
-          
           {renderContactCards()}
         </Box>
       );
@@ -262,98 +166,121 @@ const Home = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl" sx={{ pt: { xs: 10, sm: 12, md: 16 } }}>
       <Box 
-        className="home-container"
+        className="hero-content"
         sx={{ 
-          minHeight: '100vh',
           display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
+          flexDirection: 'column',
           alignItems: 'center',
-          gap: { xs: 4, md: 8 },
+          textAlign: 'center',
           position: 'relative',
-          zIndex: 1,
-          pt: { xs: 4, md: 0 }
-        }}>
+          zIndex: 1
+        }}
+      >
+        <Typography
+          variant="h1"
+          className="name-title"
+          sx={{
+            fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
+            fontWeight: 800,
+            backgroundImage: 'linear-gradient(90deg, #ffffff 0%, #a855f7 100%)',
+            backgroundClip: 'text',
+            textFillColor: 'transparent',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            mb: 1,
+            textShadow: '0 10px 30px rgba(168, 85, 247, 0.3)'
+          }}
+        >
+          {personalInfo.name}
+        </Typography>
         
-        {/* Desktop Contacts section - right side */}
-        {isDesktop && renderContacts()}
+        <Typography
+          variant="h2"
+          className="profession-title"
+          sx={{
+            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.75rem' },
+            fontWeight: 600,
+            color: '#94a3b8',
+            mb: 3,
+            textShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+          }}
+        >
+          {personalInfo.title}
+        </Typography>
+        
+        <Typography
+          variant="body1"
+          className="intro-text"
+          sx={{
+            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+            fontWeight: 400,
+            maxWidth: '800px',
+            color: '#d1d5db',
+            mb: 3,
+            lineHeight: 1.6
+          }}
+        >
+          {personalInfo.headline}
+        </Typography>
+        
+        {/* Download CV Button */}
+        <Button
+          variant="contained"
+          startIcon={<DownloadIcon />}
+          onClick={() => {
+            console.log('Generating resume with:', { personalInfo, skills, experience, education });
+            generateResume(personalInfo, skills, experience, education);
+          }}
+          sx={{
+            backgroundColor: '#a855f7',
+            mb: 5,
+            px: 3,
+            py: 1,
+            borderRadius: '8px',
+            fontWeight: 600,
+            textTransform: 'none',
+            boxShadow: '0 4px 14px rgba(168, 85, 247, 0.4)',
+            '&:hover': {
+              backgroundColor: '#9333ea',
+              boxShadow: '0 6px 20px rgba(168, 85, 247, 0.6)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Download CV
+        </Button>
+        
+        {/* Render contacts section */}
+        {renderContacts()}
+      </Box>
 
-        {/* Text content section */}
-        <Box 
-          className="content-section"
-          sx={{ flex: 1 }}>
-          {/* Name with highlighted accent */}
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              fontSize: { xs: '2rem', md: '3.5rem' },
-              fontWeight: 500,
-              mb: 2,
-              color: '#fff'
-            }}>
-            Hi, I'm <span style={{ color: '#a855f7' }}>Arshak Hayriyan</span>
-          </Typography>
-          
-          {/* Professional title */}
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              color: '#fff',
-              mb: 3,
-              fontWeight: 400
-            }}>
-            Software QA Engineer
-          </Typography>
-          
-          {/* Brief professional summary */}
+      {/* About Me Section */}
+      <Box 
+        sx={{ 
+          mt: 12, 
+          mb: 12,
+          maxWidth: '900px',
+          mx: 'auto'
+        }}
+      >
+        <SectionTitle>About Me</SectionTitle>
+
+        <ContentCard hoverEffect>
           <Typography 
             variant="body1" 
             sx={{ 
-              color: '#fff',
-              maxWidth: '600px',
-              mb: 4,
-              lineHeight: 1.8
-            }}>
-            Experienced Software QA Engineer with over 4 years of expertise in automated testing for web, desktop, and API applications.
-            Adept at designing and executing comprehensive test strategies that ensure high-quality software delivery throughout the development lifecycle. 
-            Skilled in integrating automated tests into CI/CD pipelines, optimizing testing processes, and collaborating with development teams to improve workflows and accelerate delivery cycles. 
-            Known for strong problem-solving skills and the ability to identify and resolve issues early in the process, ensuring robust and reliable software. 
-            Focused on enhancing test coverage, efficiency, and scalability, while staying aligned with Agile methodologies. 
-            Committed to continuous learning and improving testing practices to meet evolving business needs and deliver high-performing, reliable software solutions.
-          </Typography>
-        </Box>
-
-        {/* Profile image section */}
-        <Box 
-          className="profile-image-container"
-          sx={{ 
-            flex: '0 0 auto',
-            width: { xs: '280px', md: '320px' },
-            height: { xs: '280px', md: '320px' },
-            position: 'relative'
-          }}
-        >
-          <Box
-            component="img"
-            className="profile-image"
-            src="/images/profile.jpg"
-            alt="Arshak Hayriyan"
-            sx={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '16px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(168, 85, 247, 0.3)',
-              background: 'rgba(30, 41, 59, 0.4)',
-              backdropFilter: 'blur(20px)'
+              color: '#fff', 
+              lineHeight: 1.8,
+              fontSize: '1.1rem',
+              textAlign: 'center'
             }}
-          />
-        </Box>
-        
-        {/* Mobile/Tablet Contacts section - bottom */}
-        {!isDesktop && renderContacts()}
+          >
+            {personalInfo.bio}
+          </Typography>
+        </ContentCard>
       </Box>
     </Container>
   );

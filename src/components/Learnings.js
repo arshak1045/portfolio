@@ -4,88 +4,52 @@
  */
 
 import React, { useState } from 'react';
-import { Container, Typography, Box, Grid, Paper, IconButton, Modal, Fade } from '@mui/material';
+import { Container, Typography, Box, Grid, IconButton, Modal, Fade } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { commonStyles, colors } from '../styles/common';
+import { commonStyles, colors, effects } from '../styles/common';
 import '../styles/Learnings.css';
-
-// Certificate data with fully qualified URLs
-const certificates = [
-  {
-    title: 'Clean Architecture in .NET Core MVC|.NET 8| - Complete Guide',
-    image: process.env.PUBLIC_URL + '/images/certificates/clean-architecture.jpg',
-    platform: 'Udemy'
-  },
-  {
-    title: 'Selenium WebDriver with C# from Scratch - Nunit Framework',
-    image: process.env.PUBLIC_URL + '/images/certificates/selenium.jpg',
-    platform: 'Udemy'
-  },
-  {
-    title: 'Complete C# Masterclass',
-    image: process.env.PUBLIC_URL + '/images/certificates/csharp.jpg',
-    platform: 'Udemy'
-  }
-];
-
-// Project data
-const projects = [
-  {
-    title: 'Portfolio Website',
-    description: 'Personal portfolio built with React and TailwindCSS',
-    technologies: ['React', 'TypeScript'],
-    githubUrl: 'https://github.com/arshak1045/portfolio'
-  },
-  {
-    title: 'Selenium Test Framework',
-    description: 'Automated testing framework using Selenium and C#',
-    technologies: ['C#', 'Selenium', 'NUnit'],
-    githubUrl: 'https://github.com/arshak1045/SeleniumNunit'
-  },
-  {
-    title: 'MVC Project',
-    description: 'Web application using ASP.NET MVC architecture',
-    technologies: ['ASP.NET', 'C#', 'SQL Server'],
-    githubUrl: 'https://github.com/arshak1045/BookingVilla'
-  }
-];
+import { usePortfolioData } from '../context/DataContext';
+import { SectionTitle, ContentCard } from './shared';
 
 const Learnings = () => {
   // State for certificate modal
   const [selectedImage, setSelectedImage] = useState(null);
+  
+  // Use data from context
+  const { 
+    projects, 
+    getRecentCertifications 
+  } = usePortfolioData();
+  
+  // Get certificates and sort by date (newest first)
+  const certificates = getRecentCertifications();
 
   return (
     <Container>
       <Box sx={{ mt: 12, mb: 8 }}>
         {/* Certificates Section */}
         <Box sx={{ mb: 8 }}>
-          <Typography 
-            variant="h3" 
-            gutterBottom
-            sx={commonStyles.sectionTitle}
-          >
-            Certificates
-          </Typography>
+          <SectionTitle>Certificates</SectionTitle>
 
           {/* Certificates Grid */}
           <div className="certificate-grid">
-            {certificates.map((cert, index) => (
+            {certificates.map((cert) => (
               <div 
-                key={index} 
+                key={cert.id} 
                 className="certificate-item"
                 onClick={() => setSelectedImage(cert)}
               >
                 <img
-                  src={cert.image}
+                  src={process.env.PUBLIC_URL + cert.imageUrl}
                   alt={cert.title}
                 />
                 <div className="certificate-title">
                   {cert.title}
                 </div>
                 <div className="certificate-platform">
-                  {cert.platform}
+                  {cert.issuer}
                 </div>
               </div>
             ))}
@@ -94,22 +58,13 @@ const Learnings = () => {
 
         {/* GitHub Projects Section */}
         <Box sx={{ mt: 8 }}>
-          <Typography 
-            variant="h3" 
-            gutterBottom
-            sx={commonStyles.sectionTitle}
-          >
-            Projects
-          </Typography>
+          <SectionTitle>Projects</SectionTitle>
 
           {/* Projects Grid */}
           <Grid container spacing={4}>
-            {projects.map((project, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper 
-                  sx={commonStyles.paper}
-                  className="project-item"
-                >
+            {projects.map((project) => (
+              <Grid item xs={12} md={4} key={project.id}>
+                <ContentCard className="project-item">
                   {/* Project Header */}
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <GitHubIcon sx={{ color: colors.text.primary, mr: 1 }} />
@@ -133,15 +88,16 @@ const Learnings = () => {
                   {/* Technology Tags */}
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                     {project.technologies.map((tech, techIndex) => (
-                      <Paper
+                      <Box
                         key={techIndex}
+                        component="span"
                         sx={commonStyles.tag}
                       >
                         {tech}
-                      </Paper>
+                      </Box>
                     ))}
                   </Box>
-                </Paper>
+                </ContentCard>
               </Grid>
             ))}
           </Grid>
@@ -178,14 +134,14 @@ const Learnings = () => {
             {/* Certificate Image */}
             <Box
               component="img"
-              src={selectedImage?.image}
+              src={selectedImage ? process.env.PUBLIC_URL + selectedImage.imageUrl : ''}
               alt={selectedImage?.title}
               sx={{
                 maxWidth: '100%',
                 maxHeight: '85vh',
                 objectFit: 'contain',
                 borderRadius: '16px',
-                boxShadow: commonStyles.shadows
+                boxShadow: effects.shadows.medium
               }}
             />
           </Box>

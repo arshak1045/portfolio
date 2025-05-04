@@ -3,9 +3,7 @@
  * 
  * Custom styles for the Home page components including:
  * - Layout structure and responsive design
- * - Profile image styling
  * - Contact items with animations and effects
- * - Material UI overrides
  */
 
 /* ===== Layout and Container Styles ===== */
@@ -15,22 +13,6 @@
   align-items: center;
   position: relative;
   z-index: 1;
-}
-
-/* ===== Profile Image Styles ===== */
-.profile-image-container {
-  position: relative;
-}
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(20px);
 }
 
 /* ===== Contact Items Styles and Animations ===== */
@@ -129,13 +111,6 @@
     opacity: 0;
     transform: rotate(30deg) translateX(100%);
   }
-}
-
-/* ===== Material UI Overrides ===== */
-/* Override for auto-generated Material UI classes */
-.MuiBox-root.css-j5jcvq {
-  all: unset;
-  display: none !important;
 }
 
 /* ===== Responsive Styles ===== */

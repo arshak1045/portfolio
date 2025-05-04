@@ -18,25 +18,9 @@ import 'swiper/css/effect-fade';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import '../styles/About.css';
-
-// Common styles for section titles
-const sectionTitleStyles = {
-  color: '#fff',
-  textAlign: 'center',
-  fontWeight: 600,
-  position: 'relative',
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    bottom: '-10px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '60px',
-    height: '4px',
-    background: '#a855f7',
-    borderRadius: '2px'
-  }
-};
+import { usePortfolioData } from '../context/DataContext';
+import { SectionTitle, ContentCard } from './shared';
+import { commonStyles } from '../styles/common';
 
 /**
  * About Component
@@ -45,77 +29,30 @@ const sectionTitleStyles = {
  */
 const About = () => {
   const [loading, setLoading] = useState(true);
+  
+  // Get data from context
+  const { skills, getCurrentJob } = usePortfolioData();
+  
+  // Get the current job
+  const currentJob = getCurrentJob();
 
   /**
    * Skills data organized by categories
    * Each category contains an array of related skills
    */
   const skillsData = {
-    'Tools': [
-      'Postman',
-      'FlaUInspect',
-      'NUnit',
-      'Postman',
-      'Swagger',
-      'Charles Proxy',
-      'DevTools',
-      'VS Studio',
-      'Postgres',
-      'Oracle',
-      'MSSQL',
-      'PlayWright',
-      'Aqua',
-      'WeBstorm'
-    ],
-    'Programming': [
-      'C#',
-      'JavaScript',
-      'TypeScript',
-      'SQL',
-      'Powershell',
-      '.NET',
-      'Playwright',
-      'NUnit',
-      'Selenium',
-      'ASP.NET',
-      'Blazor WebAssembly',
-      'WPF'
-    ],
-    'DevOps & CI/CD': [
-      'Git',
-      'Jenkins',
-      'AWS',
-      'CodeBuild',
-      'SSM',
-      'EC2',
-      'PsExec'
-    ],
-    'Project Management': [
-      'Jira',
-      'Confluence',
-      'TestRail',
-      'Agile',
-      'Scrum',
-      'Kanban'
-    ]
+    'Tools': skills.tools.map(skill => skill.name),
+    'Programming': skills.programming.map(skill => skill.name),
+    'DevOps & CI/CD': skills.devOps.map(skill => skill.name),
+    'Project Management': skills.projectManagement.map(skill => skill.name)
   };
 
-  // Experience data
+  // Experience data from context
   const experienceData = {
-    title: 'Software QA Engineer',
-    company: 'Zealous CJSC',
-    period: '2021 - Present',
-    responsibilities: [
-      'Developed and maintained an automated testing framework for desktop applications using C#, FlaUI, and NUnit, significantly reducing manual testing time and improving test efficiency.',
-      'Designed and implemented web automation tests with Playwright and TypeScript, increasing coverage and reliability for web applications while minimizing the need for manual tests.',
-      'Configured automated test execution on EC2 instances using AWS CodeBuild, SSM, and PowerShell with PsExec, allowing for efficient and scalable testing in cloud environments.',
-      'Integrated Allure reporting into the testing process, generating comprehensive reports and storing logs in S3, providing clear insights into test execution and results.',
-      'Conducted thorough API testing using Postman, Charles Proxy, and Swagger, validating that RESTful APIs met functional and performance requirements.',
-      'Automated APIs for an internal Slackbot project using Postman, ensuring seamless communication and functionality of the bot\'s APIs.',
-      'Set up and maintained a Jenkins project to automate testing within the CI/CD pipeline, streamlining the process of building, testing, and deploying software.',
-      'Worked closely with development teams in an Agile environment, using Jira and TestRail to track test cases, manage defects, and ensure testing aligned with sprint goals.',
-      'Validated data integrity across PostgreSQL, Oracle, and MS SQL Server databases, ensuring accuracy and consistency of application data.'
-    ]
+    title: currentJob.title,
+    company: currentJob.company,
+    period: `${currentJob.startDate.substring(0, 4)} - ${currentJob.current ? 'Present' : currentJob.endDate.substring(0, 4)}`,
+    responsibilities: currentJob.responsibilities
   };
 
   return (
@@ -123,27 +60,10 @@ const About = () => {
       {/* Experience Section */}
       <Box sx={{ mt: 8, mb: 8 }}>
         {/* Section Title with purple underline */}
-        <Typography 
-          variant="h3" 
-          gutterBottom 
-          sx={sectionTitleStyles}>
-          Experience
-        </Typography>
+        <SectionTitle>Experience</SectionTitle>
 
         {/* Experience Card with shimmer effect */}
-        <Paper 
-          elevation={3} 
-          className="experience-card"
-          sx={{ 
-            p: 4, 
-            mt: 6,
-            background: 'rgba(30, 41, 59, 0.4)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(168, 85, 247, 0.15)',
-            borderRadius: '16px',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
+        <ContentCard hoverEffect>
           {/* Job Title */}
           <Typography variant="h5" gutterBottom sx={{ color: '#a855f7', fontWeight: 600 }}>
             {experienceData.title}
@@ -185,18 +105,13 @@ const About = () => {
               </Box>
             ))}
           </Typography>
-        </Paper>
+        </ContentCard>
       </Box>
 
       {/* Skills Section */}
-      <Box sx={{ mb: 8 }}>
+      <Box sx={{ mb: 12 }}>
         {/* Section Title */}
-        <Typography 
-          variant="h3" 
-          gutterBottom 
-          sx={sectionTitleStyles}>
-          Skills
-        </Typography>
+        <SectionTitle>Skills</SectionTitle>
 
         {/* Navigation Buttons Container - Moved here to be under Skills title */}
         <Box sx={{
@@ -208,41 +123,13 @@ const About = () => {
         }}>
           <IconButton
             className="swiper-custom-prev"
-            sx={{
-              color: '#fff',
-              background: 'rgba(30, 41, 59, 0.6)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(168, 85, 247, 0.15)',
-              p: 1,
-              '&:hover': {
-                color: '#a855f7',
-                background: 'rgba(30, 41, 59, 0.8)'
-              }
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            sx={commonStyles.iconButton}
           >
             <ChevronLeftIcon />
           </IconButton>
           <IconButton
             className="swiper-custom-next"
-            sx={{
-              color: '#fff',
-              background: 'rgba(30, 41, 59, 0.6)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(168, 85, 247, 0.15)',
-              p: 1,
-              '&:hover': {
-                color: '#a855f7',
-                background: 'rgba(30, 41, 59, 0.8)'
-              }
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            sx={commonStyles.iconButton}
           >
             <ChevronRightIcon />
           </IconButton>
@@ -292,30 +179,53 @@ const About = () => {
                 ) : (
                   <Paper 
                     className="skills-category-card"
+                    elevation={3}
                     sx={{ 
+                      position: 'relative',
+                      overflow: 'hidden',
                       p: 4,
+                      minHeight: '150px',
+                      mx: 'auto',
+                      maxWidth: '90%',
                       background: 'rgba(30, 41, 59, 0.4)',
                       backdropFilter: 'blur(20px)',
                       border: '1px solid rgba(168, 85, 247, 0.15)',
                       borderRadius: '16px',
-                      minHeight: '150px',
                       boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-                      transform: 'translateZ(0)', // Hardware acceleration
-                      willChange: 'opacity',      // Performance optimization
-                      mx: 'auto',                 // Center the slide
-                      maxWidth: '90%'             // Prevent overflow issues
+                      transition: 'all 0.4s ease',
+                      '&:hover': {
+                        transform: 'translateY(-10px)',
+                        boxShadow: '0 15px 30px rgba(168, 85, 247, 0.3)',
+                        borderColor: 'rgba(168, 85, 247, 0.4)',
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.05) 0%, rgba(30, 41, 59, 0) 100%)',
+                        opacity: 0,
+                        transition: 'opacity 0.4s ease',
+                        pointerEvents: 'none',
+                        borderRadius: '16px'
+                      },
+                      '&:hover::after': {
+                        opacity: 1
+                      }
                     }}
                   >
                     {/* Category Title */}
                     <Typography variant="h5" gutterBottom sx={{ color: '#a855f7', fontWeight: 600, textAlign: 'center' }}>
                       {category}
                     </Typography>
-                    
+
                     {/* Skills Grid */}
                     <Box sx={{ 
                       display: 'flex', 
                       flexWrap: 'wrap', 
-                      gap: 2,
+                      gap: 2, 
                       justifyContent: 'center',
                       mt: 3
                     }}>

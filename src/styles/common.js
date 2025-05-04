@@ -35,9 +35,8 @@ export const colors = {
  * 
  * Reusable style effect definitions including glassmorphism,
  * transitions, and shadows.
- * @private
  */
-const effects = {
+export const effects = {
   // Glass morphism effect used across components
   glass: {
     background: colors.background.main,
@@ -187,6 +186,90 @@ export const commonStyles = {
     '&:hover': {
       color: colors.primary,
       background: colors.background.hover
+    }
+  },
+
+  /**
+   * Tooltip styling
+   * Used for tooltips throughout the site
+   */
+  tooltip: {
+    '& .MuiTooltip-tooltip': {
+      backgroundColor: 'rgba(30, 41, 59, 0.9)',
+      border: '1px solid rgba(168, 85, 247, 0.3)',
+      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+      fontSize: '0.9rem',
+      padding: '8px 12px',
+      borderRadius: '6px'
+    },
+    '& .MuiTooltip-arrow': {
+      color: 'rgba(30, 41, 59, 0.9)'
+    }
+  },
+
+  /**
+   * Contact card styling
+   * Used for contact information cards
+   */
+  contactCard: {
+    display: 'flex',
+    alignItems: 'center',
+    p: 1.5,
+    gap: 1.5,
+    width: { xs: '160px', sm: '200px' },
+    background: 'rgba(30, 41, 59, 0.4)',
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(168, 85, 247, 0.15)',
+    borderRadius: '8px',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'translateY(-3px) scale(1.02)',
+      boxShadow: '0 6px 20px rgba(168, 85, 247, 0.2)',
+      borderColor: 'rgba(168, 85, 247, 0.4)'
+    }
+  },
+
+  /**
+   * Contact icon button styling
+   * Used specifically for contact buttons
+   */
+  contactIconButton: {
+    color: '#a855f7',
+    p: 1,
+    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+    '&:hover': { 
+      backgroundColor: 'rgba(168, 85, 247, 0.2)' 
+    }
+  },
+
+  /**
+   * Enhanced hover effect for content cards
+   * Used for cards that need more pronounced hover animations
+   */
+  cardHoverEffect: {
+    transform: 'translateY(0)',
+    transition: 'all 0.4s ease',
+    '&:hover': {
+      transform: 'translateY(-10px)',
+      boxShadow: '0 15px 30px rgba(168, 85, 247, 0.3)',
+      borderColor: 'rgba(168, 85, 247, 0.4)',
+      '&::after': {
+        opacity: 1
+      }
+    },
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'linear-gradient(to bottom right, rgba(168, 85, 247, 0.05) 0%, rgba(30, 41, 59, 0) 100%)',
+      opacity: 0,
+      transition: 'opacity 0.4s ease',
+      pointerEvents: 'none',
+      borderRadius: '16px'
     }
   }
 };
